@@ -1,18 +1,10 @@
 import * as http from 'http';
-import { testRequestCollection } from './mongoDB.mjs';
 import { TestRequest } from './TestRequest.mjs';
 import fs from 'node:fs'
 
 
 const server = http.createServer((req, res) => {
-  
-  /* 1- entender la url entrande
-  2- establecer los headers
-  3- llamar a la BBDD para crear el usuario
-  */ 
 
-
-  
     res.writeHead(200, 
         {
             'Content-Type': 'text/html'
@@ -29,19 +21,8 @@ const server = http.createServer((req, res) => {
 
     const newTestRequest = new TestRequest(incomingUrlParam, incomingEmailParam);
 
+    console.log(newTestRequest);
 
-    try {
-        testRequestCollection.insertOne(newTestRequest).then((result) => {
-            console.log(result);
-        });
-    }
-    catch (error) {
-        console.log(error);
-    }
-    finally {
-        console.log(`TestRequest created`);
-    }
-    
     res.end();
 
 });
