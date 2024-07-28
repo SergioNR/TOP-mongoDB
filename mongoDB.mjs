@@ -1,4 +1,5 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
+import { TestRequest } from "./TestRequest.mjs";
 
 
 const uri = `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_URI}`;
@@ -87,4 +88,35 @@ async function run() {
 
 }
 
-run().catch(console.dir);
+// run().catch(console.dir);
+
+
+const insertManyTestRequest = async (testRequest) => {
+  
+  try {
+    await client.connect();
+    const usersDB = client.db("users");
+    const usersCollection = usersDB.collection("usersCollection");
+
+    await usersCollection.insertMany(testRequest).then((result) => {
+      console.log(result);
+      console.log(`Successfully inserted ${result.insertedCount} items!`);
+    });
+
+  } catch (err) {
+    console.log(err.stack);
+  } finally {
+   await client.close();
+  }
+};
+
+
+
+
+const testRequest = new TestRequest("juan", "perez")
+const testRequest2 = new TestRequest("juan", "perez")
+const testRequest3 = new TestRequest("juan", "perez")
+
+const testRequestArray = [testRequest, testRequest2, testRequest3];
+
+insertManyTestRequest(testRequestArray);
